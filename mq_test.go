@@ -23,19 +23,18 @@ func (t *RecvPro) Consumer(msg CustomerMsg) error {
 	//return errors.New("顶顶顶顶")
 	fmt.Println(string(msg.Body))
 	//time.Sleep(1*time.Second)
-	return errors.New("顶顶顶顶")
+	return errors.New("消费异常")
 	//return nil
 }
 
 //消息已经消费3次 失败了 请进行处理
 /*
-如果消息 消费3次后 仍然失败  此处可以根据情况 对消息进行告警提醒 或者 补偿  入库db  钉钉告警等等
+如果消息 消费多次后还是失败 进行入库记录
 */
 func (t *RecvPro) FailAction(err error, msg CustomerMsg) error {
 	fmt.Println(string(msg.Body))
 	fmt.Println(err)
-	fmt.Println("任务处理失败了，我要进入db日志库了")
-	fmt.Println("任务处理失败了，发送钉钉消息通知主人")
+	fmt.Println("多次消费失败 入库")
 	return nil
 }
 
@@ -57,9 +56,9 @@ func ConsumeDelay() {
 		Host:         "127.0.0.1",
 		Port:         "5672",
 		Path:         "/",
-		ExchangeName: "yoyo_exchange_2",
-		RouteKey:     "yoyo_route_2",
-		QueueName:    "yoyo_queue_2",
+		ExchangeName: "exchange_2",
+		RouteKey:     "route_2",
+		QueueName:    "queue_2",
 		RetryNum:     0,
 	}
 
@@ -81,9 +80,9 @@ func SendMessage() {
 		Host:         "127.0.0.1",
 		Port:         "5672",
 		Path:         "/",
-		ExchangeName: "yoyo_exchange",
-		RouteKey:     "yoyo_route",
-		QueueName:    "yoyo_queue",
+		ExchangeName: "exchange",
+		RouteKey:     "route",
+		QueueName:    "queue",
 		RetryNum:     0,
 	}
 	rabbit, err := rabbitmq.NewRabbitMQ(config)
@@ -104,9 +103,9 @@ func SendDelayMessage(msg string) {
 		Host:         "127.0.0.1",
 		Port:         "5672",
 		Path:         "/",
-		ExchangeName: "yoyo_exchange_2",
-		RouteKey:     "yoyo_route_2",
-		QueueName:    "yoyo_queue_2",
+		ExchangeName: "exchange_2",
+		RouteKey:     "route_2",
+		QueueName:    "queue_2",
 		RetryNum:     0,
 	}
 
